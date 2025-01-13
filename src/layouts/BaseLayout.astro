@@ -1,0 +1,22 @@
+---
+import "../base.css";
+
+const { title } = Astro.props;
+
+export type Props = {
+  title: string;
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-gray-200 text-gray-900">
+    <slot />
+  </body>
+</html>

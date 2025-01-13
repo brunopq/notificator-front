@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LawsuitService from "../services/LawsuitService";
+
+const lawsuits = await LawsuitService.index();
+---
+
+<BaseLayout title="Lawsuits">
+  <div class="centered-container">
+    <h1 class="text-2xl font-semibold mb-8">Lawsuits</h1>
+
+    {
+      lawsuits.map((l) => (
+        <div class="mb-2">
+          <p>ID judice: {l.judiceId}</p>
+          <p>CNJ: {l.cnj}</p>
+
+          <p>{l.client.name}</p>
+        </div>
+      ))
+    }
+  </div>
+</BaseLayout>
