@@ -1,0 +1,95 @@
+---
+import { isBefore } from "date-fns";
+
+import { formatDate, formatDateTime } from "../../utils/formatting";
+
+import MovimentationService from "../../services/MovimentationService";
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const prerender = false;
+const { movimentationId } = Astro.params;
+
+if (!movimentationId) {
+  return Astro.redirect(`/lawsuits?notFound=${movimentationId}`);
+}
+
+let movimentation: Awaited<ReturnType<typeof MovimentationService.show>>;
+try {
+  movimentation = await MovimentationService.show(movimentationId);
+} catch (error) {
+  return Astro.redirect(`/lawsuits?notFound=${movimentationId}`);
+}
+---
+
+<BaseLayout title="Movimentação">
+  <div class="centered-container">
+    <header class="flex justify-between items-end mt-4 mb-6">
+      <h1 class="text-2xl font-semibold">
+        Movimentação
+        <strong class="font-semibold text-cyan-200">{movimentation.id}</strong>
+      </h1>
+
+      <p>ID judice: {movimentation.judiceId}</p>
+    </header>
+
+    <p class="flex items-center justify-between">
+      <a
+        class="text-cyan-200 underline underline-offset-2"
+        href={`/lawsuits/${movimentation.lawsuitId}`}
+      >
+        Processo: {movimentation.lawsuit.cnj}
+      </a>
+      <a
+        href={`/clients/${movimentation.lawsuit.clientId}`}
+        class="text-cyan-200 underline underline-offset-2"
+      >
+        {movimentation.lawsuit.client.name}
+      </a>
+    </p>
+
+    <p class="flex items-center justify-between">
+      <span>Criada em: {formatDate(movimentation.expeditionDate)}</span>
+      <span class="flex items-center gap-2">
+        Agendada para: {formatDateTime(movimentation.finalDate)}
+
+        {
+          isBefore(new Date(), movimentation.finalDate) && (
+            <span
+              title="Movimentação agendada para o futuro"
+              class={"size-4 rounded-full bg-cyan-500"}
+            />
+          )
+        }
+      </span>
+    </p>
+
+    <p>Tipo: {movimentation.type}</p>
+
+    <hr class="border-gray-600 my-2" />
+
+    <h3 class="text-xl font-semibold my-2">Notificações</h3>
+    <ul class="space-y-2">
+      {
+        movimentation.notifications.map((notification) => (
+          <li class="border border-gray-700 px-4 p-1">
+            <header class="flex justify-between items-center mb-2">
+              <p>{notification.id}</p>
+              <p
+                class:list={[
+                  notification.sentAt ? "text-cyan-200" : "text-red-300",
+                ]}
+              >
+                {notification.sentAt
+                  ? `Enviado em ${formatDateTime(notification.sentAt)}`
+                  : "Não enviado"}
+              </p>
+            </header>
+
+            <p>{notification.message}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div></BaseLayout
+>
