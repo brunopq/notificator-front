@@ -79,3 +79,10 @@ export const fullMovimentationSchema = movimentationSchema.extend({
 export const publicationWithLawsuitSchema = publicationSchema.extend({
   lawsuit: lawsuitSchema,
 });
+
+export const notificationWithClientSchema = notificationSchema.extend({
+  client: clientSchema,
+});
+export const notificationWithClientListSchema = z.array(
+  notificationWithClientSchema
+);

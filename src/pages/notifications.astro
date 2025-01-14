@@ -1,0 +1,65 @@
+---
+import NotificationService from "../services/NotificationService";
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { formatDate } from "../utils/formatting";
+
+export const prerender = false;
+
+const notifications = await NotificationService.index();
+---
+
+<BaseLayout title="Notificações">
+  <div class="centered-container">
+    <header class="flex justify-between items-end mt-4 mb-6">
+      <h1 class="text-2xl font-semibold">Notificações</h1>
+    </header>
+
+    {
+      notifications.map((notification) => (
+        <div class="mb-2 border border-gray-700 px-4 p-1">
+          <p class="flex items-center justify-between">
+            <span class="text-gray-400 text-sm">{notification.id}</span>
+            <span>
+              {notification.sentAt
+                ? `Enviada em: ${formatDate(notification.sentAt)}`
+                : "Não enviada"}
+            </span>
+          </p>
+
+          <p class="flex items-center justify-between">
+            <a
+              href={`/movimentations/${notification.movimentationId}`}
+              class="text-cyan-200 underline underline-offset-2"
+            >
+              Ver movimentação
+            </a>
+            <a
+              href={`/clients/${notification.clientId}`}
+              class="text-cyan-200 underline underline-offset-2"
+            >
+              {notification.client.name}
+            </a>
+          </p>
+
+          <p
+            id="message"
+            class="text-gray-200 text-sm mt-2 line-clamp-1 cursor-pointer"
+          >
+            {notification.message}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  const messages = document.querySelectorAll("#message");
+
+  messages.forEach((message) => {
+    message.addEventListener("click", () => {
+      message.classList.toggle("line-clamp-1");
+    });
+  });
+</script>

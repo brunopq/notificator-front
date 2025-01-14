@@ -3,6 +3,7 @@ export const prerender = false;
 
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import LawsuitService from "../../services/LawsuitService";
+import { formatDate } from "../../utils/formatting";
 
 const { lawsuitId } = Astro.params;
 
@@ -21,39 +22,41 @@ try {
 
 <BaseLayout title="Lawsuit">
   <div class="centered-container">
-    <h1 class="text-2xl font-semibold mb-8">
-      Processo <strong class="font-semibold text-cyan-200">{lawsuit.cnj}</strong
-      >
-    </h1>
+    <header class="flex justify-between items-end mt-4 mb-6">
+      <h1 class="text-2xl font-semibold">
+        Processo
+        <strong class="font-semibold text-cyan-200">{lawsuit.cnj}</strong>
+      </h1>
 
-    <div>
       <p>ID judice: {lawsuit.judiceId}</p>
+    </header>
 
-      <a
-        href={`/clients/${lawsuit.clientId}`}
-        class="text-cyan-200 underline underline-offset-2"
-      >
-        {lawsuit.client.name}
-      </a>
+    <a
+      href={`/clients/${lawsuit.clientId}`}
+      class="text-cyan-200 underline underline-offset-2"
+    >
+      {lawsuit.client.name}
+    </a>
 
-      <p class="mb-1">Movimentações ({lawsuit.movimentations.length}):</p>
-      {
-        lawsuit.movimentations.map((movimentation) => (
-          <div class="mb-2 border border-gray-700 px-4 p-1">
-            <p class="flex items-center justify-between">
-              <span>{movimentation.type}</span>
-              <a
-                class="text-cyan-200 underline underline-offset-2"
-                href={`/movimentations/${movimentation.id}`}
-              >
-                {movimentation.id}
-              </a>
-            </p>
-            <p>{movimentation.expeditionDate}</p>
-            <p>{movimentation.finalDate}</p>
-          </div>
-        ))
-      }
-    </div>
+    <p class="mb-1">Movimentações ({lawsuit.movimentations.length}):</p>
+    {
+      lawsuit.movimentations.map((movimentation) => (
+        <div class="mb-2 border border-gray-700 px-4 p-1">
+          <p class="flex items-center justify-between">
+            <span>{movimentation.type}</span>
+            <a
+              class="text-cyan-200 underline underline-offset-2"
+              href={`/movimentations/${movimentation.id}`}
+            >
+              {movimentation.id}
+            </a>
+          </p>
+          <p class="flex justify-between items-center">
+            <span>Expedido em: {formatDate(movimentation.expeditionDate)}</span>
+            <span>Agendado para: {formatDate(movimentation.finalDate)}</span>
+          </p>
+        </div>
+      ))
+    }
   </div>
 </BaseLayout>
