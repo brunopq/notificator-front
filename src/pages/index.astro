@@ -4,6 +4,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout title="Home page">
   <div class="centered-container">
-    <h1>Welcome to Astro</h1>
+    <header class="flex justify-between items-end mt-4 mb-6">
+      <h1 class="text-2xl font-semibold">
+        Super sistema gerenciador de notificações
+      </h1>
+    </header>
+
+    <ul class="text-cyan-200 underline underline-offset-2 flex gap-4">
+      <li><a href="/lawsuits">Ver todos os processos</a></li>
+      <li><a href="/publications">Ver todas as publicações</a></li>
+      <li><a href="/notifications">Ver todas as notificações</a></li>
+    </ul>
   </div>
 </BaseLayout>
