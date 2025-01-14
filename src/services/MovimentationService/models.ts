@@ -7,7 +7,7 @@ export const movimentationSchema = z.object({
   judiceId: z.number(),
   lawsuitId: z.string(),
   type: movimentationTypes,
-  expeditionDate: z.date(),
-  finalDate: z.date(),
+  expeditionDate: z.date({ coerce: true }),
+  finalDate: z.date({ coerce: true }),
 });
 export const movimentationListSchema = z.array(movimentationSchema);

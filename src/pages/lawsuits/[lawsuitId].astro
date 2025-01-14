@@ -1,0 +1,59 @@
+---
+export const prerender = false;
+
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import LawsuitService from "../../services/LawsuitService";
+
+const { lawsuitId } = Astro.params;
+
+if (!lawsuitId) {
+  return Astro.redirect(`/lawsuits?notFound=${lawsuitId}`);
+}
+
+let lawsuit: Awaited<ReturnType<typeof LawsuitService.show>>;
+try {
+  lawsuit = await LawsuitService.show(lawsuitId);
+} catch (error) {
+  console.log(error);
+  return Astro.redirect(`/lawsuits?notFound=${lawsuitId}`);
+}
+---
+
+<BaseLayout title="Lawsuit">
+  <div class="centered-container">
+    <h1 class="text-2xl font-semibold mb-8">
+      Processo <strong class="font-semibold text-cyan-200">{lawsuit.cnj}</strong
+      >
+    </h1>
+
+    <div>
+      <p>ID judice: {lawsuit.judiceId}</p>
+
+      <a
+        href={`/clients/${lawsuit.clientId}`}
+        class="text-cyan-200 underline underline-offset-2"
+      >
+        {lawsuit.client.name}
+      </a>
+
+      <p class="mb-1">Movimentações ({lawsuit.movimentations.length}):</p>
+      {
+        lawsuit.movimentations.map((movimentation) => (
+          <div class="mb-2 border border-gray-700 px-4 p-1">
+            <p class="flex items-center justify-between">
+              <span>{movimentation.type}</span>
+              <a
+                class="text-cyan-200 underline underline-offset-2"
+                href={`/movimentations/${movimentation.id}`}
+              >
+                {movimentation.id}
+              </a>
+            </p>
+            <p>{movimentation.expeditionDate}</p>
+            <p>{movimentation.finalDate}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,30 @@
+---
+export type Props = {
+  show: boolean;
+  message: string;
+};
+
+let { show, message } = Astro.props;
+---
+
+<div
+  id="toast"
+  class={`${
+    show ? "block" : "hidden"
+  } fixed bottom-4 right-1/2 translate-x-1/2 bg-cyan-600/50 border border-cyan-600 rounded-sm backdrop-blur text-cyan-50 p-4 `}
+>
+  <p>{message}</p>
+  <button id="toast-close" class="absolute top-1 right-1 text-cyan-50">
+    X
+  </button>
+</div>
+
+<script>
+  const toast = document.getElementById("toast");
+  const button = document.getElementById("toast-close");
+
+  button?.addEventListener("click", () => {
+    toast?.classList.remove("block");
+    toast?.classList.add("hidden");
+  });
+</script>

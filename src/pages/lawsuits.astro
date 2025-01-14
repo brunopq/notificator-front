@@ -1,21 +1,39 @@
 ---
+export const prerender = false;
+
+import Toast from "../components/Toast.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import LawsuitService from "../services/LawsuitService";
+
+const notFound = Astro.url.searchParams.get("notFound");
 
 const lawsuits = await LawsuitService.index();
 ---
 
 <BaseLayout title="Lawsuits">
+  <Toast show={!!notFound} message={`Processo ${notFound} não encontrado`} />
   <div class="centered-container">
-    <h1 class="text-2xl font-semibold mb-8">Lawsuits</h1>
+    <h1 class="text-2xl font-semibold mb-8">Processos</h1>
 
     {
       lawsuits.map((l) => (
-        <div class="mb-2">
+        <div class="mb-2 grid grid-rows-3 grid-cols-[1fr_auto] border border-gray-700 pl-4 p-1">
           <p>ID judice: {l.judiceId}</p>
           <p>CNJ: {l.cnj}</p>
 
-          <p>{l.client.name}</p>
+          <a
+            href={`/clients/${l.clientId}`}
+            class="text-cyan-200 underline underline-offset-2"
+          >
+            {l.client.name}
+          </a>
+
+          <a
+            href={`/lawsuits/${l.id}`}
+            class="col-start-2 row-span-full bg-cyan-900 flex items-center justify-center p-2"
+          >
+            Ver mais
+          </a>
         </div>
       ))
     }
