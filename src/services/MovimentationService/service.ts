@@ -1,6 +1,6 @@
 import { parsedFetch } from "../parsedFetch";
 
-import { movimentationListSchema } from "./models";
+import { fullMovimentationSchema, movimentationListSchema } from ".";
 
 export class MovimentationService {
   async index() {
@@ -8,6 +8,6 @@ export class MovimentationService {
   }
 
   async show(id: string) {
-    return parsedFetch(`/movimentations/${id}`, movimentationListSchema);
+    return parsedFetch(`/movimentations/${id}`, fullMovimentationSchema);
   }
 }

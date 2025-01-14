@@ -1,4 +1,10 @@
 import { LawsuitService } from "./service";
 
 export default new LawsuitService();
-export * from "./models";
+export {
+  lawsuitSchema,
+  lawsuitListSchema,
+  lawsuitWithClientSchema,
+  lawsuitWithClientListSchema,
+  fullLawsuitSchema,
+} from "../models";

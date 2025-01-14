@@ -1,1 +1,1 @@
-export * from "./models";
+export { publicationSchema, publicationWithLawsuitSchema } from "../models";

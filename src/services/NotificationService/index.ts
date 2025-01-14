@@ -1,1 +1,1 @@
-export * from "./models";
+export { notificationSchema, notificationListSchema } from "../models";

@@ -1,6 +1,6 @@
 import { parsedFetch } from "../parsedFetch";
 
-import { lawsuitWithClientListSchema, fullLawsuit } from "./models";
+import { lawsuitWithClientListSchema, fullLawsuitSchema } from ".";
 
 export class LawsuitService {
   async index() {
@@ -8,6 +8,6 @@ export class LawsuitService {
   }
 
   async show(cnj: string) {
-    return parsedFetch(`/lawsuits/${cnj}`, fullLawsuit);
+    return parsedFetch(`/lawsuits/${cnj}`, fullLawsuitSchema);
   }
 }

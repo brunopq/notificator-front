@@ -1,1 +1,1 @@
-export * from "./models";
+export { clientSchema } from "../models";
