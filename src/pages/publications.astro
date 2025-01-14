@@ -1,0 +1,53 @@
+---
+export const prerender = false;
+
+import { formatDate, formatDateTime } from "../utils/formatting";
+
+import PublicationService from "../services/PublicationService";
+
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const publications = await PublicationService.index();
+---
+
+<BaseLayout title="Publications">
+  <div class="centered-container">
+    <header class="flex justify-between items-end mt-4 mb-6">
+      <h1 class="text-2xl font-semibold">Publications</h1>
+    </header>
+
+    {
+      publications.map((publication) => (
+        <div class="mb-2 border border-gray-700 px-4 p-1">
+          <p class="flex items-center justify-between">
+            <span>
+              Data de expedição: {formatDateTime(publication.expeditionDate)}
+            </span>
+            {publication.hasBeenTreated ? (
+              <span class="text-gray-300">Tratada</span>
+            ) : (
+              <span class="text-cyan-300">Aberta</span>
+            )}
+          </p>
+
+          <p class="flex items-center justify-between">
+            <a
+              href={`/lawsuits/${publication.lawsuitId}`}
+              class="text-cyan-200 underline underline-offset-2"
+            >
+              Ver processo
+            </a>
+            {publication.movimentationId && (
+              <a
+                href={`/movimentations/${publication.movimentationId}`}
+                class="text-cyan-200 underline underline-offset-2"
+              >
+                Ver movimentação
+              </a>
+            )}
+          </p>
+        </div>
+      ))
+    }
+  </div>
+</BaseLayout>

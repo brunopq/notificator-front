@@ -56,9 +56,10 @@ export const publicationSchema = z.object({
   judiceId: z.number(),
   lawsuitId: z.string(),
   movimentationId: z.string().nullable(),
-  expeditionDate: z.date(),
+  expeditionDate: z.date({ coerce: true }),
   hasBeenTreated: z.boolean(),
 });
+export const publicationListSchema = z.array(publicationSchema);
 
 // extended models
 
