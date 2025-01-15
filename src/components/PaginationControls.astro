@@ -23,7 +23,12 @@ export type Props = {
         class="text-cyan-200 underline underline-offset-2">Anterior</Link
       >
 
-      <Link href={generateParams({ limit, offset: offset + limit })}>
+      <Link
+        href={generateParams({
+          limit,
+          offset: Math.min(offset + limit, total - (total % limit)),
+        })}
+      >
         Próximo
       </Link>
     </div>
