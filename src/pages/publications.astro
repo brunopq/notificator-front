@@ -1,23 +1,36 @@
 ---
 export const prerender = false;
 
-import { formatDate, formatDateTime } from "../utils/formatting";
+import { extractPaginationData } from "../utils/pagination";
+import { formatDateTime } from "../utils/formatting";
 
 import PublicationService from "../services/PublicationService";
 
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const publications = await PublicationService.index();
+import PaginationControls from "../components/PaginationControls.astro";
+
+const searchParams = Astro.url.searchParams;
+
+const publications = await PublicationService.index(
+  extractPaginationData(searchParams)
+);
 ---
 
-<BaseLayout title="Publications">
+<BaseLayout title="Publicações">
   <div class="centered-container">
     <header class="flex justify-between items-end mt-4 mb-6">
-      <h1 class="text-2xl font-semibold">Publications</h1>
+      <h1 class="text-2xl font-semibold">Publicações</h1>
     </header>
 
+    <PaginationControls
+      limit={publications.limit}
+      offset={publications.offset}
+      total={publications.total}
+    />
+
     {
-      publications.map((publication) => (
+      publications.data.map((publication) => (
         <div class="mb-2 border border-gray-700 px-4 p-1">
           <p class="flex items-center justify-between">
             <span>

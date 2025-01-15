@@ -1,12 +1,20 @@
 ---
+import { formatDate } from "../utils/formatting";
+import { extractPaginationData } from "../utils/pagination";
+
 import NotificationService from "../services/NotificationService";
 
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { formatDate } from "../utils/formatting";
+
+import PaginationControls from "../components/PaginationControls.astro";
 
 export const prerender = false;
 
-const notifications = await NotificationService.index();
+const searchParams = Astro.url.searchParams;
+
+const notifications = await NotificationService.index(
+  extractPaginationData(searchParams)
+);
 ---
 
 <BaseLayout title="Notificações">
@@ -15,8 +23,14 @@ const notifications = await NotificationService.index();
       <h1 class="text-2xl font-semibold">Notificações</h1>
     </header>
 
+    <PaginationControls
+      limit={notifications.limit}
+      offset={notifications.offset}
+      total={notifications.total}
+    />
+
     {
-      notifications.map((notification) => (
+      notifications.data.map((notification) => (
         <div class="mb-2 border border-gray-700 px-4 p-1">
           <p class="flex items-center justify-between">
             <span class="text-gray-400 text-sm">{notification.id}</span>

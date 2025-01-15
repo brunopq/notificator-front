@@ -1,8 +1,17 @@
-import { notificationListSchema, notificationWithClientListSchema } from ".";
+import {
+  generateParams,
+  paginated,
+  type PaginationOptions,
+} from "../../utils/pagination";
+
+import { notificationWithClientSchema } from ".";
 import { parsedFetch } from "../parsedFetch";
 
 export class NotificationService {
-  async index() {
-    return parsedFetch("/notifications", notificationWithClientListSchema);
+  async index(pagination: PaginationOptions) {
+    return parsedFetch(
+      `/notifications${generateParams(pagination)}`,
+      paginated(notificationWithClientSchema)
+    );
   }
 }

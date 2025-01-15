@@ -16,8 +16,11 @@ export const extractPaginationData = (
   searchParams: URLSearchParams
 ): PaginationOptions => {
   return {
-    limit: parseInt(searchParams.get("limit") ?? "10"),
-    offset: parseInt(searchParams.get("offset") ?? "0"),
+    limit: Math.max(
+      0,
+      Math.min(100, parseInt(searchParams.get("limit") ?? "10"))
+    ),
+    offset: Math.max(0, parseInt(searchParams.get("offset") ?? "0")),
   };
 };
 

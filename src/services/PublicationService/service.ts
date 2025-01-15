@@ -1,9 +1,18 @@
+import {
+  generateParams,
+  paginated,
+  type PaginationOptions,
+} from "../../utils/pagination";
+
 import { parsedFetch } from "../parsedFetch";
 
-import { publicationListSchema } from ".";
+import { publicationSchema } from ".";
 
 export class PublicationService {
-  async index() {
-    return parsedFetch("/publications", publicationListSchema);
+  async index(pagination: PaginationOptions) {
+    return await parsedFetch(
+      `/publications${generateParams(pagination)}`,
+      paginated(publicationSchema)
+    );
   }
 }
