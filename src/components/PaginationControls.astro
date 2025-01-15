@@ -1,0 +1,45 @@
+---
+import { generateParams } from "../utils/pagination";
+
+import Link from "./Link.astro";
+
+const { limit, offset, total } = Astro.props;
+
+export type Props = {
+  limit: number;
+  offset: number;
+  total: number;
+};
+---
+
+<div class="flex gap-6">
+  <div>
+    <p>
+      Página {Math.floor(offset / limit) + 1} de {Math.ceil(total / limit)}
+    </p>
+    <div class="space-x-2 mb-4">
+      <Link
+        href={generateParams({ limit, offset: Math.max(offset - limit, 0) })}
+        class="text-cyan-200 underline underline-offset-2">Anterior</Link
+      >
+
+      <Link href={generateParams({ limit, offset: offset + limit })}>
+        Próximo
+      </Link>
+    </div>
+  </div>
+
+  <div>
+    <p>
+      Mostrando {limit} registros
+    </p>
+
+    <div class="space-x-2">
+      <span>Alterar:</span>
+      <Link href={generateParams({ limit: 5, offset })}>5</Link>
+      <Link href={generateParams({ limit: 10, offset })}>10</Link>
+      <Link href={generateParams({ limit: 20, offset })}>20</Link>
+      <Link href={generateParams({ limit: 50, offset })}>50</Link>
+    </div>
+  </div>
+</div>
