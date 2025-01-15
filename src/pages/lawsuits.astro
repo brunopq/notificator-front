@@ -1,13 +1,20 @@
 ---
 export const prerender = false;
 
+import { extractPaginationData } from "../utils/pagination";
+
 import Toast from "../components/Toast.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import LawsuitService from "../services/LawsuitService";
+import PaginationControls from "../components/PaginationControls.astro";
 
-const notFound = Astro.url.searchParams.get("notFound");
+const searchParams = Astro.url.searchParams;
 
-const lawsuits = await LawsuitService.index();
+const notFound = searchParams.get("notFound");
+
+const lawsuits = await LawsuitService.index(
+  extractPaginationData(searchParams)
+);
 ---
 
 <BaseLayout title="Lawsuits">
@@ -15,8 +22,13 @@ const lawsuits = await LawsuitService.index();
   <div class="centered-container">
     <h1 class="text-2xl font-semibold mb-8">Processos</h1>
 
+    <PaginationControls
+      limit={lawsuits.limit}
+      offset={lawsuits.offset}
+      total={lawsuits.total}
+    />
     {
-      lawsuits.map((l) => (
+      lawsuits.data.map((l) => (
         <div class="mb-2 grid grid-rows-3 grid-cols-[1fr_auto] border border-gray-700 pl-4 p-1">
           <p>ID judice: {l.judiceId}</p>
           <p>CNJ: {l.cnj}</p>
